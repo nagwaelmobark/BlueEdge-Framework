@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlueEdge Framework - Mobile Edge Data Cleaning</title>
+    <meta name="description" content="Revolutionary mobile edge computing framework for intelligent data cleaning with 82.2% accuracy and 4-30x performance improvement">
+    <meta name="keywords" content="mobile edge computing, data cleaning, MECC, machine learning, data processing">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="BlueEdge Framework - Mobile Edge Data Cleaning">
+    <meta property="og:description" content="Revolutionary framework achieving 82.2% accuracy with 4-30x performance improvement">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://nagwaelmobark.github.io/BlueEdge-Framework/">
+    
+    
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Custom Styles -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(255,255,255,0.1)" points="0,0 1000,300 1000,1000 0,700"/></svg>');
+            background-size: cover;
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        .hero .subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+        
+        .hero .description {
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.8;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: #ff6b6b;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .btn-secondary:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-3px);
+        }
+        
+        /* Performance Stats */
+        .stats {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 60px;
+            animation: fadeInUp 1s ease-out 0.8s both;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+        
+        .stat-item h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #ff6b6b;
+        }
+        
+        .stat-item p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            background: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .section-title p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 2rem;
+            color: white;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* Performance Section */
+        .performance {
+            padding: 100px 0;
+            background: #667eea;
+            color: white;
+        }
+        
+        .performance-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .performance-content h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+        
+        .performance-list {
+            list-style: none;
+        }
+        
+        .performance-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .performance-list li i {
+            color: #ff6b6b;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .performance-chart {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .chart-bars {
+            display: flex;
+            justify-content: space-around;
+            align-items: end;
+            height: 200px;
+            margin: 30px 0;
+        }
+        
+        .chart-bar {
+            background: #ff6b6b;
+            width: 60px;
+            border-radius: 30px 30px 0 0;
+            position: relative;
+            animation: growUp 2s ease-out;
+        }
+        
+        .chart-bar::after {
+            content: attr(data-label);
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        
+        .chart-bar::before {
+            content: attr(data-value);
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        /* Documentation Section */
+        .documentation {
+            padding: 100px 0;
+            background: #f8f9fa;
+        }
+        
+        .docs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .doc-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .doc-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .doc-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+        
+        .doc-card h3 i {
+            color: #667eea;
+            margin-right: 10px;
+        }
+        
+        .doc-card p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .doc-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .doc-link:hover {
+            text-decoration: underline;
+        }
+        
+        .doc-link i {
+            margin-left: 5px;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-section ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-section ul li a:hover {
+            color: #ff6b6b;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #555;
+            color: #ccc;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes growUp {
+            from {
+                height: 0;
+            }
+            to {
+                height: var(--height);
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .performance-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .chart-bars {
+                height: 150px;
+            }
+            
+            .chart-bar {
+                width: 40px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>BlueEdge Framework</h1>
+            <p class="subtitle">Revolutionary Mobile Edge Computing for Intelligent Data Cleaning</p>
+            <p class="description">
+                Achieve 82.2% accuracy with 4-30x performance improvement while reducing data exposure by 70-80%. 
+                The first framework to perform sophisticated data cleaning directly on mobile devices.
+            </p>
+            
+            <div class="cta-buttons">
+                <a href="#documentation" class="btn btn-primary">
+                    <i class="fas fa-rocket"></i> Get Started
+                </a>
+                <a href="https://github.com/nagwaelmobark/BlueEdge-Framework" class="btn btn-secondary">
+                    <i class="fab fa-github"></i> View on GitHub
+                </a>
+            </div>
+            
+            <!-- Performance Stats -->
+            <div class="stats">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <h3>82.2%</h3>
+                        <p>Overall Accuracy</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>4-30x</h3>
+                        <p>Faster Processing</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>5KB</h3>
+                        <p>Memory Usage</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>70-80%</h3>
+                        <p>Less Data Exposure</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Revolutionary Features</h2>
+                <p>Breakthrough capabilities that transform how data cleaning is performed in mobile environments</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Mobile Edge Processing</h3>
+                    <p>First-in-class framework to perform sophisticated data cleaning directly on mobile devices, eliminating cloud dependency and reducing latency.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Privacy by Design</h3>
+                    <p>Raw data never leaves your device. Only cleaned, anonymized results are transmitted, reducing data exposure by 70-80%.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h3>Superior Performance</h3>
+                    <p>4-30x faster than commercial alternatives while using only 5KB memory per session. Statistically validated with 95% confidence intervals.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Intelligent Algorithms</h3>
+                    <p>Advanced NLP techniques with Levenshtein distance and fuzzy matching for 6 types of duplicate detection with 72-95% accuracy.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-cloud-sync-alt"></i>
+                    </div>
+                    <h3>Firebase Integration</h3>
+                    <p>Seamless real-time synchronization with Firebase for cleaned data storage, offline support, and multi-device collaboration.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Open Source</h3>
+                    <p>100% free and open source. No licensing costs, vendor lock-in, or hidden fees. Complete transparency and community-driven development.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Performance Section -->
+    <section class="performance">
+        <div class="container">
+            <div class="performance-grid">
+                <div class="performance-content">
+                    <h2>Proven Performance</h2>
+                    <p style="margin-bottom: 30px; opacity: 0.9;">
+                        Statistically validated results from comprehensive testing with 146 error cases across 6 duplicate detection categories.
+                    </p>
+                    
+                    <ul class="performance-list">
+                        <li><i class="fas fa-check-circle"></i> 95.2% accuracy for honorific prefixes</li>
+                        <li><i class="fas fa-check-circle"></i> 90.5% accuracy for name abbreviations</li>
+                        <li><i class="fas fa-check-circle"></i> 85.7% accuracy for split names</li>
+                        <li><i class="fas fa-check-circle"></i> 78.4% accuracy for spelling variations</li>
+                        <li><i class="fas fa-check-circle"></i> 76.2% accuracy for common nicknames</li>
+                        <li><i class="fas fa-check-circle"></i> 72.0% accuracy for misspellings</li>
+                    </ul>
+                </div>
+                
+                <div class="performance-chart">
+                    <h3>Processing Speed Comparison</h3>
+                    <div class="chart-bars">
+                        <div class="chart-bar" data-label="BlueEdge" data-value="1s" style="--height: 180px; height: 180px;"></div>
+                        <div class="chart-bar" data-label="WinPure" data-value="4s" style="--height: 120px; height: 120px;"></div>
+                        <div class="chart-bar" data-label="DoubleTake" data-value="5s" style="--height: 100px; height: 100px;"></div>
+                        <div class="chart-bar" data-label="WizSame" data-value="3s" style="--height: 140px; height: 140px;"></div>
+                        <div class="chart-bar" data-label="DQGlobal" data-value="30s" style="--height: 20px; height: 20px;"></div>
+                    </div>
+                    <p style="margin-top: 20px; opacity: 0.8;">Seconds per 1000 records</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Documentation Section -->
+    <section class="documentation" id="documentation">
+        <div class="container">
+            <div class="section-title">
+                <h2>Complete Documentation</h2>
+                <p>Everything you need to get started, from installation to advanced usage</p>
+            </div>
+            
+            <div class="docs-grid">
+                <div class="doc-card">
+                    <h3><i class="fas fa-book"></i> User Guide</h3>
+                    <p>Step-by-step instructions for installation, setup, and basic usage of the BlueEdge Framework.</p>
+                    <a href="docs/USER_GUIDE.html" class="doc-link">Read Guide <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="doc-card">
+                    <h3><i class="fas fa-code"></i> API Reference</h3>
+                    <p>Complete API documentation with functions, parameters, examples, and code samples.</p>
+                    <a href="docs/API_REFERENCE.html" class="doc-link">View API <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="doc-card">
+                    <h3><i class="fas fa-project-diagram"></i> Architecture</h3>
+                    <p>Technical architecture overview, system design, and component interactions.</p>
+                    <a href="docs/ARCHITECTURE.html" class="doc-link">Explore Architecture <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="doc-card">
+                    <h3><i class="fas fa-chart-line"></i> Performance Analysis</h3>
+                    <p>Comprehensive performance benchmarks, statistical analysis, and comparison studies.</p>
+                    <a href="docs/PERFORMANCE_ANALYSIS.html" class="doc-link">View Results <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="doc-card">
+                    <h3><i class="fas fa-graduation-cap"></i> Research Paper</h3>
+                    <p>Academic research paper with methodology, experiments, and peer-reviewed findings.</p>
+                    <a href="docs/RESEARCH_PAPER.html" class="doc-link">Read Paper <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="doc-card">
+                    <h3><i class="fas fa-download"></i> Installation</h3>
+                    <p>Platform-specific installation guides for Android, iOS, Windows, and macOS.</p>
+                    <a href="docs/INSTALLATION.html" class="doc-link">Install Now <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>BlueEdge Framework</h3>
+                    <p style="color: #ccc; margin-bottom: 20px;">
+                        Revolutionary mobile edge computing framework for intelligent data cleaning.
+                    </p>
+                    <div>
+                        <a href="https://github.com/nagwaelmobark/BlueEdge-Framework" style="color: #ccc; margin-right: 15px; font-size: 1.5rem;">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" style="color: #ccc; margin-right: 15px; font-size: 1.5rem;">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                        <a href="#" style="color: #ccc; font-size: 1.5rem;">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Documentation</h3>
+                    <ul>
+                        <li><a href="docs/USER_GUIDE.html">User Guide</a></li>
+                        <li><a href="docs/API_REFERENCE.html">API Reference</a></li>
+                        <li><a href="docs/ARCHITECTURE.html">Architecture</a></li>
+                        <li><a href="docs/INSTALLATION.html">Installation</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="docs/PERFORMANCE_ANALYSIS.html">Performance Analysis</a></li>
+                        <li><a href="docs/RESEARCH_PAPER.html">Research Paper</a></li>
+                        <li><a href="examples/">Examples</a></li>
+                        <li><a href="https://github.com/nagwaelmobark/BlueEdge-Framework/issues">Support</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Community</h3>
+                    <ul>
+                        <li><a href="https://github.com/nagwaelmobark/BlueEdge-Framework/discussions">Discussions</a></li>
+                        <li><a href="https://github.com/nagwaelmobark/BlueEdge-Framework/issues">Issues</a></li>
+                        <li><a href="CONTRIBUTING.html">Contributing</a></li>
+                        <li><a href="CODE_OF_CONDUCT.html">Code of Conduct</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 BlueEdge Framework. Licensed under the MIT License. | 
+                   <a href="privacy.html" style="color: #ff6b6b;">Privacy Policy</a> | 
+                   <a href="terms.html" style="color: #ff6b6b;">Terms of Service</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Smooth Scrolling Script -->
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.feature-card, .doc-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Counter animation for stats
+        function animateCounter(element, target, duration = 2000) {
+            let start = 0;
+            const increment = target / (duration / 16);
+            
+            function updateCounter() {
+                start += increment;
+                if (start < target) {
+                    element.textContent = Math.floor(start) + (element.textContent.includes('%') ? '%' : '');
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    element.textContent = target + (element.textContent.includes('%') ? '%' : '');
+                }
+            }
+            
+            updateCounter();
+        }
+
+        // Animate stats when they come into view
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const h3 = entry.target.querySelector('h3');
+                    const text = h3.textContent;
+                    const number = parseFloat(text.replace(/[^\d.]/g, ''));
+                    
+                    if (!isNaN(number)) {
+                        h3.textContent = '0' + (text.includes('%') ? '%' : '');
+                        setTimeout(() => animateCounter(h3, number), 500);
+                    }
+                    
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.stat-item').forEach(el => {
+            statsObserver.observe(el);
+        });
+    </script>
+</body>
+</html> 

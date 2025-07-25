@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlueEdge Compatibility Matrix</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+        
+        .matrix-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .compatibility-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .compatibility-table th {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .compatibility-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+        
+        .compatibility-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .compatibility-table tr:hover {
+            background-color: #e3f2fd;
+            transform: scale(1.01);
+            transition: all 0.3s ease;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-supported {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .status-partial {
+            background-color: #f39c12;
+            color: white;
+        }
+        
+        .status-development {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .status-planned {
+            background-color: #9b59b6;
+            color: white;
+        }
+        
+        .status-unsupported {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .performance-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .perf-excellent { background-color: #27ae60; }
+        .perf-good { background-color: #f39c12; }
+        .perf-fair { background-color: #e67e22; }
+        .perf-poor { background-color: #e74c3c; }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .feature-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .feature-card h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .version-info {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .requirement-level {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .req-minimum {
+            background-color: #fee;
+            color: #c53030;
+        }
+        
+        .req-recommended {
+            background-color: #e6fffa;
+            color: #008080;
+        }
+        
+        .req-optimal {
+            background-color: #f0fff4;
+            color: #22543d;
+        }
+        
+        @media (max-width: 768px) {
+            .compatibility-table {
+                font-size: 0.8rem;
+            }
+            
+            .compatibility-table th,
+            .compatibility-table td {
+                padding: 8px 6px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+        
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🔧 BlueEdge Compatibility Matrix</h1>
+            <p>Comprehensive compatibility guide for BlueEdge mobile edge data cleaning framework</p>
+            <div class="legend">
+                <div class="legend-item">
+                    <span class="status-badge status-supported">Fully Supported</span>
+                    <span>100% feature support</span>
+                </div>
+                <div class="legend-item">
+                    <span class="status-badge status-partial">Partial Support</span>
+                    <span>Limited features</span>
+                </div>
+                <div class="legend-item">
+                    <span class="status-badge status-development">In Development</span>
+                    <span>Coming soon</span>
+                </div>
+                <div class="legend-item">
+                    <span class="status-badge status-planned">Planned</span>
+                    <span>Future roadmap</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Platform Compatibility -->
+        <div class="matrix-section">
+            <h2 class="section-title">📱 Mobile Platform Compatibility</h2>
+            <table class="compatibility-table">
+                <thead>
+                    <tr>
+                        <th>Platform</th>
+                        <th>Version Support</th>
+                        <th>Status</th>
+                        <th>Performance</th>
+                        <th>APK/App Size</th>
+                        <th>Key Features</th>
+                        <th>Limitations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>🤖 Android</strong></td>
+                        <td>6.0+ (API 23+)<br><span class="version-info">Tested up to Android 14</span></td>
+                        <td><span class="status-badge status-supported">Fully Supported</span></td>
+                        <td><span class="performance-indicator perf-excellent"></span>Excellent</td>
+                        <td>~50MB</td>
+                        <td>All core features, Real-time processing, Firebase sync</td>
+                        <td>None</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🍎 iOS</strong></td>
+                        <td>12.0+<br><span class="version-info">Tested up to iOS 17</span></td>
+                        <td><span class="status-badge status-supported">Fully Supported</span></td>
+                        <td><span class="performance-indicator perf-excellent"></span>Excellent</td>
+                        <td>~52MB</td>
+                        <td>All core features, Native performance</td>
+                        <td>App Store approval required</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🪟 Windows Mobile</strong></td>
+                        <td>Windows 10 Mobile+</td>
+                        <td><span class="status-badge status-unsupported">Unsupported</span></td>
+                        <td><span class="performance-indicator perf-poor"></span>N/A</td>
+                        <td>N/A</td>
+                        <td>Platform discontinued</td>
+                        <td>Platform EOL</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Desktop Platform Compatibility -->
+        <div class="matrix-section">
+            <h2 class="section-title">🖥️ Desktop Platform Compatibility</h2>
+            <table class="compatibility-table">
+                <thead>
+                    <tr>
+                        <th>Platform</th>
+                        <th>Version Support</th>
+                        <th>Status</th>
+                        <th>Performance</th>
+                        <th>Package Size</th>
+                        <th>Installation Method</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>🪟 Windows</strong></td>
+                        <td>Windows 10+<br><span class="version-info">Windows 11 recommended</span></td>
+                        <td><span class="status-badge status-development">In Development</span></td>
+                        <td><span class="performance-indicator perf-good"></span>Good</td>
+                        <td>~75MB</td>
+                        <td>MSI Installer, Microsoft Store</td>
+                        <td>Beta testing Q1 2024</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🍎 macOS</strong></td>
+                        <td>macOS 10.14+<br><span class="version-info">macOS 12+ recommended</span></td>
+                        <td><span class="status-badge status-development">In Development</span></td>
+                        <td><span class="performance-indicator perf-good"></span>Good</td>
+                        <td>~70MB</td>
+                        <td>DMG, Mac App Store</td>
+                        <td>ARM64 & Intel support</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🐧 Linux</strong></td>
+                        <td>Ubuntu 18.04+, CentOS 7+</td>
+                        <td><span class="status-badge status-planned">Planned</span></td>
+                        <td><span class="performance-indicator perf-good"></span>Good</td>
+                        <td>~65MB</td>
+                        <td>AppImage, Snap, deb/rpm</td>
+                        <td>Q2 2024 roadmap</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Hardware Requirements -->
+        <div class="matrix-section">
+            <h2 class="section-title">⚙️ Hardware Requirements Matrix</h2>
+            <table class="compatibility-table">
+                <thead>
+                    <tr>
+                        <th>Device Category</th>
+                        <th>RAM</th>
+                        <th>Storage</th>
+                        <th>CPU</th>
+                        <th>Max Records/Session</th>
+                        <th>Performance Rating</th>
+                        <th>Recommended Use</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>🔋 Entry Level</strong></td>
+                        <td>3GB <span class="requirement-level req-minimum">Minimum</span></td>
+                        <td>100MB</td>
+                        <td>Dual-core 1.5GHz</td>
+                        <td>2,000</td>
+                        <td><span class="performance-indicator perf-fair"></span>Fair</td>
+                        <td>Basic cleaning tasks</td>
+                    </tr>
+                    <tr>
+                        <td><strong>⚡ Mid-Range</strong></td>
+                        <td>6GB <span class="requirement-level req-recommended">Recommended</span></td>
+                        <td>500MB</td>
+                        <td>Quad-core 2.0GHz</td>
+                        <td>5,000</td>
+                        <td><span class="performance-indicator perf-good"></span>Good</td>
+                        <td>Regular data processing</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🚀 High-End</strong></td>
+                        <td>8GB+ <span class="requirement-level req-optimal">Optimal</span></td>
+                        <td>1GB+</td>
+                        <td>Octa-core 2.5GHz+</td>
+                        <td>10,000+</td>
+                        <td><span class="performance-indicator perf-excellent"></span>Excellent</td>
+                        <td>Heavy workloads, batch processing</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Network Compatibility -->
+        <div class="matrix-section">
+            <h2 class="section-title">🌐 Network Compatibility</h2>
+            <table class="compatibility-table">
+                <thead>
+                    <tr>
+                        <th>Network Type</th>
+                        <th>Speed</th>
+                        <th>Support Status</th>
+                        <th>Performance Impact</th>
+                        <th>Sync Capability</th>
+                        <th>Offline Mode</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>📶 5G</strong></td>
+                        <td>1-10 Gbps</td>
+                        <td><span class="status-badge status-supported">Fully Supported</span></td>
+                        <td><span class="performance-indicator perf-excellent"></span>Excellent</td>
+                        <td>Real-time</td>
+                        <td>✅ Available</td>
+                        <td>Optimal experience</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📶 4G LTE</strong></td>
+                        <td>10-100 Mbps</td>
+                        <td><span class="status-badge status-supported">Fully Supported</span></td>
+                        <td><span class="performance-indicator perf-excellent"></span>Excellent</td>
+                        <td>Real-time</td>
+                        <td>✅ Available</td>
+                        <td>Recommended minimum</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📶 3G</strong></td>
+                        <td>1-10 Mbps</td>
+                        <td><span class="status-badge status-supported">Fully Supported</span></td>
+                        <td><span class="performance-indicator perf-good"></span>Good</td>
+                        <td>Delayed</td>
+                        <td>✅ Available</td>
+                        <td>+0.2s processing delay</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📡 WiFi 6</strong></td>
+                        <td>1-9.6 Gbps</td>
+                        <td><span class="status-badge status-supported">Fully Supported</span></td>
+                        <td><span class="performance-indicator perf-excellent"></span>Excellent</td>
+                        <td>Real-time</td>
+                        <td>✅ Available</td>
+                        <td>Best performance</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📡 WiFi 5/4</strong></td>
+                        <td>100-1300 Mbps</td>
+                        <td><span class="status-badge status-supported">Fully Supported</span></td>
+                        <td><span class="performance-indicator perf-excellent"></span>Excellent</td>
+                        <td>Real-time</td>
+                        <td>✅ Available</td>
+                        <td>Standard performance</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🔌 Offline</strong></td>
+                        <td>No connection</td>
+                        <td><span class="status-badge status-supported">Fully Supported</span></td>
+                        <td><span class="performance-indicator perf-excellent"></span>Excellent</td>
+                        <td>Queued</td>
+                        <td>✅ Full support</td>
+                        <td>Auto-sync when connected</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Software Dependencies -->
+        <div class="matrix-section">
+            <h2 class="section-title">📦 Software Dependencies Compatibility</h2>
+            <table class="compatibility-table">
+                <thead>
+                    <tr>
+                        <th>Dependency</th>
+                        <th>Version Required</th>
+                        <th>Version Tested</th>
+                        <th>Compatibility</th>
+                        <th>Install Size</th>
+                        <th>Performance Impact</th>
+                        <th>Optional/Required</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>🐍 Python</strong></td>
+                        <td>3.8+</td>
+                        <td>3.8, 3.9, 3.10, 3.11</td>
+                        <td><span class="status-badge status-supported">Fully Compatible</span></td>
+                        <td>20MB</td>
+                        <td><span class="performance-indicator perf-excellent"></span>Core</td>
+                        <td>Required</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📱 KIVY</strong></td>
+                        <td>2.1.0+</td>
+                        <td>2.1.0, 2.2.0</td>
+                        <td><span class="status-badge status-supported">Fully Compatible</span></td>
+                        <td>15MB</td>
+                        <td><span class="performance-indicator perf-excellent"></span>UI</td>
+                        <td>Required</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🧠 NLTK</strong></td>
+                        <td>3.7+</td>
+                        <td>3.7, 3.8</td>
+                        <td><span class="status-badge status-supported">Fully Compatible</span></td>
+                        <td>10MB</td>
+                        <td><span class="performance-indicator perf-excellent"></span>Processing</td>
+                        <td>Required</td>
+                    </tr>
+                    <tr>
+                        <td><strong>☁️ Firebase SDK</strong></td>
+                        <td>6.0.0+</td>
+                        <td>6.0.0, 6.1.0</td>
+                        <td><span class="status-badge status-supported">Fully Compatible</span></td>
+                        <td>5MB</td>
+                        <td><span class="performance-indicator perf-good"></span>Sync</td>
+                        <td>Optional</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📊 Pandas</strong></td>
+                        <td>1.3.0+</td>
+                        <td>1.3.5, 1.4.0, 1.5.0</td>
+                        <td><span class="status-badge status-supported">Fully Compatible</span></td>
+                        <td>12MB</td>
+                        <td><span class="performance-indicator perf-good"></span>Data</td>
+                        <td>Required</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🔢 NumPy</strong></td>
+                        <td>1.21.0+</td>
+                        <td>1.21.6, 1.22.0, 1.23.0</td>
+                        <td><span class="status-badge status-supported">Fully Compatible</span></td>
+                        <td>8MB</td>
+                        <td><span class="performance-indicator perf-excellent"></span>Math</td>
+                        <td>Required</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Database Compatibility -->
+        <div class="matrix-section">
+            <h2 class="section-title">🗄️ Database Compatibility</h2>
+            <table class="compatibility-table">
+                <thead>
+                    <tr>
+                        <th>Database Type</th>
+                        <th>Support Status</th>
+                        <th>Integration Method</th>
+                        <th>Performance</th>
+                        <th>Features Supported</th>
+                        <th>Limitations</th>
+                        <th>Roadmap</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>🔥 Firebase Realtime</strong></td>
+                        <td><span class="status-badge status-supported">Fully Supported</span></td>
+                        <td>Native SDK</td>
+                        <td><span class="performance-indicator perf-excellent"></span>Excellent</td>
+                        <td>Real-time sync, Offline mode</td>
+                        <td>None</td>
+                        <td>Current</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🔥 Firestore</strong></td>
+                        <td><span class="status-badge status-partial">Partial Support</span></td>
+                        <td>Firebase SDK</td>
+                        <td><span class="performance-indicator perf-good"></span>Good</td>
+                        <td>Document storage</td>
+                        <td>Limited real-time features</td>
+                        <td>Q1 2024</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🐘 PostgreSQL</strong></td>
+                        <td><span class="status-badge status-development">In Development</span></td>
+                        <td>REST API</td>
+                        <td><span class="performance-indicator perf-good"></span>Good</td>
+                        <td>CRUD operations</td>
+                        <td>No real-time sync</td>
+                        <td>Q2 2024</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🗄️ MySQL</strong></td>
+                        <td><span class="status-badge status-development">In Development</span></td>
+                        <td>REST API</td>
+                        <td><span class="performance-indicator perf-good"></span>Good</td>
+                        <td>CRUD operations</td>
+                        <td>No real-time sync</td>
+                        <td>Q2 2024</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🏢 SQL Server</strong></td>
+                        <td><span class="status-badge status-planned">Planned</span></td>
+                        <td>ODBC/REST</td>
+                        <td><span class="performance-indicator perf-good"></span>Good</td>
+                        <td>Enterprise features</td>
+                        <td>Requires enterprise license</td>
+                        <td>Q3 2024</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🟠 Oracle</strong></td>
+                        <td><span class="status-badge status-planned">Planned</span></td>
+                        <td>OCI/REST</td>
+                        <td><span class="performance-indicator perf-good"></span>Good</td>
+                        <td>Enterprise features</td>
+                        <td>Complex setup</td>
+                        <td>Q4 2024</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Feature Compatibility Summary -->
+        <div class="matrix-section">
+            <h2 class="section-title">🎯 Feature Compatibility by Platform</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🤖 Android Features</h4>
+                    <ul>
+                        <li>✅ Real-time processing</li>
+                        <li>✅ Firebase integration</li>
+                        <li>✅ Offline mode</li>
+                        <li>✅ Background processing</li>
+                        <li>✅ Push notifications</li>
+                        <li>✅ File system access</li>
+                        <li>✅ Network status detection</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h4>🍎 iOS Features</h4>
+                    <ul>
+                        <li>✅ Real-time processing</li>
+                        <li>✅ Firebase integration</li>
+                        <li>✅ Offline mode</li>
+                        <li>⚠️ Limited background processing</li>
+                        <li>✅ Push notifications</li>
+                        <li>⚠️ Sandboxed file access</li>
+                        <li>✅ Network status detection</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h4>🪟 Windows Features (In Dev)</h4>
+                    <ul>
+                        <li>✅ Real-time processing</li>
+                        <li>✅ Firebase integration</li>
+                        <li>✅ Offline mode</li>
+                        <li>✅ Background services</li>
+                        <li>🔄 Windows notifications</li>
+                        <li>✅ Full file system access</li>
+                        <li>✅ Network monitoring</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h4>🍎 macOS Features (In Dev)</h4>
+                    <ul>
+                        <li>✅ Real-time processing</li>
+                        <li>✅ Firebase integration</li>
+                        <li>✅ Offline mode</li>
+                        <li>✅ Background agents</li>
+                        <li>🔄 macOS notifications</li>
+                        <li>⚠️ Security-restricted access</li>
+                        <li>✅ Network monitoring</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Testing Matrix -->
+        <div class="matrix-section">
+            <h2 class="section-title">🧪 Testing Coverage Matrix</h2>
+            <table class="compatibility-table">
+                <thead>
+                    <tr>
+                        <th>Test Category</th>
+                        <th>Android</th>
+                        <th>iOS</th>
+                        <th>Windows</th>
+                        <th>macOS</th>
+                        <th>Overall Coverage</th>
+                        <th>Last Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Unit Tests</strong></td>
+                        <td><span class="performance-indicator perf-excellent"></span>98%</td>
+                        <td><span class="performance-indicator perf-excellent"></span>95%</td>
+                        <td><span class="performance-indicator perf-good"></span>75%</td>
+                        <td><span class="performance-indicator perf-good"></span>70%</td>
+                        <td><span class="performance-indicator perf-excellent"></span>95%</td>
+                        <td>Dec 2024</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Integration Tests</strong></td>
+                        <td><span class="performance-indicator perf-excellent"></span>92%</td>
+                        <td><span class="performance-indicator perf-excellent"></span>90%</td>
+                        <td><span class="performance-indicator perf-fair"></span>60%</td>
+                        <td><span class="performance-indicator perf-fair"></span>55%</td>
+                        <td><span class="performance-indicator perf-excellent"></span>87%</td>
+                        <td>Dec 2024</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Performance Tests</strong></td>
+                        <td><span class="performance-indicator perf-excellent"></span>100%</td>
+                        <td><span class="performance-indicator perf-excellent"></span>100%</td>
+                        <td><span class="performance-indicator perf-good"></span>80%</td>
+                        <td><span class="performance-indicator perf-good"></span>75%</td>
+                        <td><span class="performance-indicator perf-excellent"></span>100%</td>
+                        <td>Dec 2024</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Security Tests</strong></td>
+                        <td><span class="performance-indicator perf-excellent"></span>95%</td>
+                        <td><span class="performance-indicator perf-excellent"></span>93%</td>
+                        <td><span class="performance-indicator perf-fair"></span>65%</td>
+                        <td><span class="performance-indicator perf-fair"></span>60%</td>
+                        <td><span class="performance-indicator perf-excellent"></span>92%</td>
+                        <td>Dec 2024</td>
+                    </tr>
+                    <tr>
+                        <td><strong>UI/UX Tests</strong></td>
+                        <td><span class="performance-indicator perf-excellent"></span>88%</td>
+                        <td><span class="performance-indicator perf-excellent"></span>85%</td>
+                        <td><span class="performance-indicator perf-fair"></span>50%</td>
+                        <td><span class="performance-indicator perf-fair"></span>45%</td>
+                        <td><span class="performance-indicator perf-good"></span>80%</td>
+                        <td>Dec 2024</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Known Issues and Workarounds -->
+        <div class="matrix-section">
+            <h2 class="section-title">⚠️ Known Issues & Workarounds</h2>
+            <table class="compatibility-table">
+                <thead>
+                    <tr>
+                        <th>Platform</th>
+                        <th>Issue</th>
+                        <th>Impact</th>
+                        <th>Workaround</th>
+                        <th>Fix Status</th>
+                        <th>ETA</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>🤖 Android 6.0</strong></td>
+                        <td>Runtime permission handling</td>
+                        <td>Low</td>
+                        <td>Manual permission grant required</td>
+                        <td><span class="status-badge status-development">In Progress</span></td>
+                        <td>Q1 2024</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🍎 iOS 12</strong></td>
+                        <td>Background processing limitations</td>
+                        <td>Medium</td>
+                        <td>Use foreground processing only</td>
+                        <td><span class="status-badge status-planned">Planned</span></td>
+                        <td>Q2 2024</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📶 3G Networks</strong></td>
+                        <td>Sync timeout on large datasets</td>
+                        <td>Low</td>
+                        <td>Enable offline mode</td>
+                        <td><span class="status-badge status-supported">Fixed</span></td>
+                        <td>Completed</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🔋 Low RAM Devices</strong></td>
+                        <td>App crash with >5000 records</td>
+                        <td>Medium</td>
+                        <td>Batch processing in smaller chunks</td>
+                        <td><span class="status-badge status-supported">Fixed</span></td>
+                        <td>Completed</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html> 

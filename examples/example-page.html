@@ -1,0 +1,826 @@
+---
+layout: doc
+title: "Examples & Tutorials"
+description: "Comprehensive examples and tutorials for the BlueEdge Framework"
+---
+
+# Examples & Tutorials
+
+Learn BlueEdge through practical examples and step-by-step tutorials. From basic usage to advanced implementations.
+
+## 🚀 Quick Start Examples
+
+### Basic Duplicate Detection
+
+```python
+from blueedge import BlueEdge
+
+# Initialize BlueEdge
+processor = BlueEdge()
+
+# Sample data with potential duplicates
+data = [
+    {'first_name': 'Mohammed', 'middle_name': 'Ahmed', 'last_name': 'Hassan'},
+    {'first_name': 'Mohammad', 'middle_name': 'Ahmad', 'last_name': 'Hasan'},
+    {'first_name': 'Dr. Sara', 'middle_name': 'Omar', 'last_name': 'Ali'},
+    {'first_name': 'Sara', 'middle_name': 'Omar', 'last_name': 'Ali'}
+]
+
+# Process the data
+results = processor.clean_data(data)
+
+print(f"Total records: {results['total_records']}")
+print(f"Duplicates found: {results['duplicates_count']}")
+print(f"Accuracy: {results['accuracy_score']:.1f}%")
+```
+
+**Output:**
+```
+Total records: 4
+Duplicates found: 2
+Accuracy: 89.3%
+```
+
+---
+
+## 📱 Mobile App Examples
+
+### KIVY Application Setup
+
+```python
+# main.py - BlueEdge Mobile App
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.label import Label
+from kivy.uix.textinput import TextInput
+from kivy.uix.button import Button
+from blueedge.core import BlueEdgeProcessor
+
+class BlueEdgeApp(App):
+    def build(self):
+        # Main layout
+        layout = BoxLayout(orientation='vertical', padding=20, spacing=10)
+        
+        # Title
+        title = Label(
+            text='BlueEdge Data Cleaner',
+            size_hint_y=None,
+            height=50,
+            font_size=20
+        )
+        layout.add_widget(title)
+        
+        # Input fields
+        self.first_name = TextInput(
+            hint_text='First Name',
+            size_hint_y=None,
+            height=40
+        )
+        self.middle_name = TextInput(
+            hint_text='Middle Name',
+            size_hint_y=None,
+            height=40
+        )
+        self.last_name = TextInput(
+            hint_text='Last Name',
+            size_hint_y=None,
+            height=40
+        )
+        
+        layout.add_widget(self.first_name)
+        layout.add_widget(self.middle_name)
+        layout.add_widget(self.last_name)
+        
+        # Process button
+        process_btn = Button(
+            text='Check for Duplicates',
+            size_hint_y=None,
+            height=50
+        )
+        process_btn.bind(on_press=self.process_data)
+        layout.add_widget(process_btn)
+        
+        # Results
+        self.results_label = Label(
+            text='Results will appear here',
+            text_size=(None, None)
+        )
+        layout.add_widget(self.results_label)
+        
+        return layout
+    
+    def process_data(self, instance):
+        # Get input data
+        record = {
+            'first_name': self.first_name.text,
+            'middle_name': self.middle_name.text,
+            'last_name': self.last_name.text
+        }
+        
+        # Process with BlueEdge
+        processor = BlueEdgeProcessor()
+        result = processor.process_record(record)
+        
+        # Display results
+        self.results_label.text = f"""
+Processing Results:
+• Clean Name: {result['clean_name']}
+• Duplicate Status: {result['is_duplicate']}
+• Similarity Score: {result['similarity_score']:.2f}
+• Processing Time: {result['processing_time']:.3f}s
+        """
+
+if __name__ == '__main__':
+    BlueEdgeApp().run()
+```
+
+### Building for Mobile Platforms
+
+```bash
+# Android Build Script
+#!/bin/bash
+
+# Install Buildozer
+pip install buildozer
+
+# Initialize buildozer.spec
+buildozer init
+
+# Build APK
+buildozer android debug
+
+# Install on connected device
+buildozer android deploy
+```
+
+---
+
+## ☁️ Firebase Integration Examples
+
+### Setting up Firebase Connection
+
+```python
+# firebase_setup.py
+from blueedge.firebase import FirebaseConnector
+import json
+
+# Firebase configuration
+config = {
+    "apiKey": "your-api-key",
+    "authDomain": "your-project.firebaseapp.com",
+    "databaseURL": "https://your-project-default-rtdb.firebaseio.com",
+    "projectId": "your-project",
+    "storageBucket": "your-project.appspot.com",
+    "messagingSenderId": "123456789",
+    "appId": "your-app-id"
+}
+
+# Save configuration
+with open('firebase_config.json', 'w') as f:
+    json.dump(config, f, indent=2)
+
+# Initialize connector
+firebase = FirebaseConnector(config_path='firebase_config.json')
+
+print("Firebase connected successfully!")
+```
+
+### Real-time Data Synchronization
+
+```python
+# sync_example.py
+from blueedge.firebase import FirebaseConnector
+from blueedge import BlueEdge
+import time
+
+class RealTimeProcessor:
+    def __init__(self):
+        self.processor = BlueEdge()
+        self.firebase = FirebaseConnector(config_path='firebase_config.json')
+    
+    def process_and_sync(self, data):
+        """Process data locally and sync cleaned results"""
+        # Local processing (privacy-preserving)
+        cleaned_data = self.processor.clean_data(data)
+        
+        # Remove sensitive information before upload
+        upload_data = {
+            'total_records': cleaned_data['total_records'],
+            'duplicates_count': cleaned_data['duplicates_count'],
+            'accuracy_score': cleaned_data['accuracy_score'],
+            'processing_time': cleaned_data['processing_time'],
+            'timestamp': time.time()
+        }
+        
+        # Sync to Firebase
+        result = self.firebase.upload_cleaned_data(upload_data)
+        
+        return {
+            'local_results': cleaned_data,
+            'sync_status': result['success'],
+            'record_id': result.get('record_id')
+        }
+
+# Usage
+processor = RealTimeProcessor()
+
+sample_data = [
+    {'first_name': 'Ahmed', 'last_name': 'Hassan'},
+    {'first_name': 'Ahmad', 'last_name': 'Hasan'}
+]
+
+result = processor.process_and_sync(sample_data)
+print(f"Sync successful: {result['sync_status']}")
+print(f"Record ID: {result['record_id']}")
+```
+
+---
+
+## 📊 Performance Monitoring Examples
+
+### Real-time Performance Tracking
+
+```python
+# performance_monitor.py
+from blueedge.monitor import PerformanceMonitor
+from blueedge import BlueEdge
+import time
+
+# Initialize components
+monitor = PerformanceMonitor()
+processor = BlueEdge()
+
+# Start monitoring
+monitor.start_monitoring()
+
+# Sample processing task
+data = [
+    {'first_name': f'User{i}', 'last_name': f'Name{i}'} 
+    for i in range(1000)
+]
+
+start_time = time.time()
+results = processor.clean_data(data)
+end_time = time.time()
+
+# Get performance metrics
+metrics = monitor.get_metrics()
+
+print("Performance Metrics:")
+print(f"• CPU Usage: {metrics['cpu_usage']:.1f}%")
+print(f"• Memory Usage: {metrics['memory_usage']} bytes")
+print(f"• Processing Speed: {metrics['processing_speed']:.1f} records/sec")
+print(f"• Accuracy Rate: {metrics['accuracy_rate']:.1f}%")
+print(f"• Total Time: {end_time - start_time:.2f} seconds")
+```
+
+### Batch Processing with Progress Tracking
+
+```python
+# batch_processing.py
+from blueedge.edge import EdgeProcessor
+from blueedge.monitor import ProgressTracker
+import pandas as pd
+
+def process_large_dataset(csv_file_path):
+    """Process large CSV files in batches"""
+    
+    # Initialize components
+    processor = EdgeProcessor(memory_limit=5000)
+    tracker = ProgressTracker()
+    
+    # Read CSV in chunks
+    chunk_size = 1000
+    csv_reader = pd.read_csv(csv_file_path, chunksize=chunk_size)
+    
+    # Count total chunks for progress tracking
+    total_rows = sum(1 for _ in open(csv_file_path)) - 1  # -1 for header
+    total_chunks = (total_rows // chunk_size) + 1
+    
+    tracker.start(total_batches=total_chunks)
+    
+    results = []
+    for i, chunk in enumerate(csv_reader):
+        # Convert to list of dictionaries
+        records = chunk.to_dict('records')
+        
+        # Process batch
+        batch_result = processor.process_batch(records)
+        results.append(batch_result)
+        
+        # Update progress
+        tracker.update(i + 1)
+        print(f"Progress: {tracker.get_percentage():.1f}% - "
+              f"Processed: {batch_result['processed_count']} records")
+    
+    tracker.finish()
+    
+    # Aggregate results
+    total_processed = sum(r['processed_count'] for r in results)
+    total_errors = sum(r['error_count'] for r in results)
+    total_time = sum(r['processing_time'] for r in results)
+    
+    return {
+        'total_processed': total_processed,
+        'total_errors': total_errors,
+        'total_time': total_time,
+        'average_speed': total_processed / total_time if total_time > 0 else 0
+    }
+
+# Usage
+result = process_large_dataset('large_dataset.csv')
+print(f"Processed {result['total_processed']} records in {result['total_time']:.2f}s")
+print(f"Average speed: {result['average_speed']:.1f} records/second")
+```
+
+---
+
+## 🔧 Advanced Usage Examples
+
+### Custom Similarity Functions
+
+```python
+# custom_similarity.py
+from blueedge.core import register_similarity_function
+import re
+
+def phonetic_similarity(str1, str2):
+    """Custom phonetic similarity using Soundex algorithm"""
+    
+    def soundex(s):
+        """Generate Soundex code for a string"""
+        if not s:
+            return "0000"
+        
+        s = re.sub(r'[^A-Za-z]', '', s.upper())
+        if not s:
+            return "0000"
+        
+        first_letter = s[0]
+        
+        # Soundex mapping
+        mapping = {
+            'BFPV': '1', 'CGJKQSXZ': '2', 'DT': '3',
+            'L': '4', 'MN': '5', 'R': '6'
+        }
+        
+        code = first_letter
+        for char in s[1:]:
+            for key, value in mapping.items():
+                if char in key:
+                    if code[-1] != value:
+                        code += value
+                    break
+        
+        # Pad or trim to 4 characters
+        code = (code + "000")[:4]
+        return code
+    
+    soundex1 = soundex(str1)
+    soundex2 = soundex(str2)
+    
+    # Calculate similarity based on matching characters
+    matches = sum(1 for a, b in zip(soundex1, soundex2) if a == b)
+    return matches / 4.0
+
+# Register the custom function
+register_similarity_function('phonetic', phonetic_similarity)
+
+# Use in BlueEdge
+from blueedge import BlueEdge
+
+processor = BlueEdge(similarity_function='phonetic')
+result = processor.compare_names('Smith', 'Smyth')
+print(f"Phonetic similarity: {result:.2f}")
+```
+
+### Multi-threading for Performance
+
+```python
+# multithread_example.py
+from blueedge import BlueEdge
+import threading
+import queue
+import time
+
+class MultiThreadProcessor:
+    def __init__(self, num_threads=4):
+        self.num_threads = num_threads
+        self.processors = [BlueEdge() for _ in range(num_threads)]
+        self.input_queue = queue.Queue()
+        self.result_queue = queue.Queue()
+    
+    def worker(self, processor_id):
+        """Worker thread function"""
+        processor = self.processors[processor_id]
+        
+        while True:
+            try:
+                # Get task from queue
+                task = self.input_queue.get(timeout=1)
+                if task is None:  # Shutdown signal
+                    break
+                
+                # Process the task
+                batch_id, data = task
+                result = processor.clean_data(data)
+                
+                # Put result in output queue
+                self.result_queue.put((batch_id, result))
+                
+                # Mark task as done
+                self.input_queue.task_done()
+                
+            except queue.Empty:
+                continue
+    
+    def process_parallel(self, data_batches):
+        """Process multiple batches in parallel"""
+        
+        # Start worker threads
+        threads = []
+        for i in range(self.num_threads):
+            t = threading.Thread(target=self.worker, args=(i,))
+            t.start()
+            threads.append(t)
+        
+        # Add tasks to queue
+        for i, batch in enumerate(data_batches):
+            self.input_queue.put((i, batch))
+        
+        # Wait for all tasks to complete
+        self.input_queue.join()
+        
+        # Signal workers to stop
+        for _ in range(self.num_threads):
+            self.input_queue.put(None)
+        
+        # Wait for all threads to finish
+        for t in threads:
+            t.join()
+        
+        # Collect results
+        results = {}
+        while not self.result_queue.empty():
+            batch_id, result = self.result_queue.get()
+            results[batch_id] = result
+        
+        return results
+
+# Usage example
+processor = MultiThreadProcessor(num_threads=4)
+
+# Create sample batches
+batches = [
+    [{'first_name': f'User{i}', 'last_name': f'Name{i}'} for i in range(j*100, (j+1)*100)]
+    for j in range(10)  # 10 batches of 100 records each
+]
+
+start_time = time.time()
+results = processor.process_parallel(batches)
+end_time = time.time()
+
+print(f"Processed {len(batches)} batches in {end_time - start_time:.2f} seconds")
+print(f"Total records: {sum(r['total_records'] for r in results.values())}")
+```
+
+---
+
+## 🧪 Testing Examples
+
+### Unit Testing
+
+```python
+# test_blueedge.py
+import unittest
+from blueedge import BlueEdge
+from blueedge.core import levenshtein_distance, normalize_name
+
+class TestBlueEdge(unittest.TestCase):
+    
+    def setUp(self):
+        """Set up test fixtures"""
+        self.processor = BlueEdge()
+    
+    def test_levenshtein_distance(self):
+        """Test Levenshtein distance calculation"""
+        # Identical strings
+        self.assertEqual(levenshtein_distance("test", "test"), 0.0)
+        
+        # Different strings
+        distance = levenshtein_distance("Mohammed", "Mohammad")
+        self.assertGreater(distance, 0.0)
+        self.assertLess(distance, 1.0)
+    
+    def test_name_normalization(self):
+        """Test name normalization"""
+        result = normalize_name("Dr. Ahmed Hassan Omar")
+        
+        self.assertEqual(result['first_name'], 'ahmed')
+        self.assertEqual(result['middle_name'], 'hassan')
+        self.assertEqual(result['last_name'], 'omar')
+        self.assertNotIn('dr.', result['full_normalized'])
+    
+    def test_duplicate_detection(self):
+        """Test duplicate detection functionality"""
+        data = [
+            {'first_name': 'Mohammed', 'last_name': 'Ahmed'},
+            {'first_name': 'Mohammad', 'last_name': 'Ahmad'}
+        ]
+        
+        result = self.processor.clean_data(data)
+        
+        self.assertEqual(result['total_records'], 2)
+        self.assertGreater(result['duplicates_count'], 0)
+        self.assertGreater(result['accuracy_score'], 0)
+    
+    def test_performance_constraints(self):
+        """Test performance constraints"""
+        import time
+        
+        # Test with 1000 records
+        data = [
+            {'first_name': f'User{i}', 'last_name': f'Name{i}'} 
+            for i in range(1000)
+        ]
+        
+        start_time = time.time()
+        result = self.processor.clean_data(data)
+        processing_time = time.time() - start_time
+        
+        # Should process 1000 records in approximately 1 second
+        self.assertLess(processing_time, 2.0)
+        self.assertEqual(result['total_records'], 1000)
+
+if __name__ == '__main__':
+    unittest.main()
+```
+
+### Performance Benchmarking
+
+```python
+# benchmark.py
+from blueedge import BlueEdge
+import time
+import psutil
+import os
+
+class BenchmarkSuite:
+    def __init__(self):
+        self.processor = BlueEdge()
+        self.results = {}
+    
+    def memory_usage(self):
+        """Get current memory usage in bytes"""
+        process = psutil.Process(os.getpid())
+        return process.memory_info().rss
+    
+    def benchmark_processing_speed(self, sizes=[100, 500, 1000, 5000]):
+        """Benchmark processing speed across different data sizes"""
+        print("Benchmarking Processing Speed...")
+        
+        for size in sizes:
+            # Generate test data
+            data = [
+                {'first_name': f'User{i}', 'last_name': f'Name{i}'} 
+                for i in range(size)
+            ]
+            
+            # Measure memory before
+            memory_before = self.memory_usage()
+            
+            # Process and measure time
+            start_time = time.time()
+            result = self.processor.clean_data(data)
+            processing_time = time.time() - start_time
+            
+            # Measure memory after
+            memory_after = self.memory_usage()
+            memory_used = memory_after - memory_before
+            
+            # Calculate metrics
+            records_per_second = size / processing_time
+            
+            self.results[f'size_{size}'] = {
+                'processing_time': processing_time,
+                'memory_used': memory_used,
+                'records_per_second': records_per_second,
+                'accuracy': result['accuracy_score']
+            }
+            
+            print(f"Size {size}: {processing_time:.3f}s, "
+                  f"{records_per_second:.1f} rec/s, "
+                  f"{memory_used/1024:.1f}KB")
+    
+    def benchmark_accuracy(self):
+        """Benchmark accuracy across different error types"""
+        print("\nBenchmarking Accuracy...")
+        
+        test_cases = {
+            'spelling_variations': [
+                ({'first_name': 'Mohammed', 'last_name': 'Ahmed'}, 
+                 {'first_name': 'Mohammad', 'last_name': 'Ahmad'})
+            ],
+            'honorific_prefixes': [
+                ({'first_name': 'Dr. Ahmed', 'last_name': 'Hassan'}, 
+                 {'first_name': 'Ahmed', 'last_name': 'Hassan'})
+            ],
+            'abbreviations': [
+                ({'first_name': 'Robert', 'last_name': 'Smith'}, 
+                 {'first_name': 'Rob', 'last_name': 'Smith'})
+            ]
+        }
+        
+        for category, cases in test_cases.items():
+            correct_detections = 0
+            total_cases = len(cases)
+            
+            for record1, record2 in cases:
+                result = self.processor.clean_data([record1, record2])
+                if result['duplicates_count'] > 0:
+                    correct_detections += 1
+            
+            accuracy = (correct_detections / total_cases) * 100
+            self.results[f'accuracy_{category}'] = accuracy
+            
+            print(f"{category}: {accuracy:.1f}% accuracy")
+    
+    def generate_report(self):
+        """Generate comprehensive benchmark report"""
+        print("\n" + "="*50)
+        print("BLUEEDGE BENCHMARK REPORT")
+        print("="*50)
+        
+        print("\nProcessing Speed Results:")
+        for key, value in self.results.items():
+            if key.startswith('size_'):
+                size = key.split('_')[1]
+                print(f"  {size} records: {value['processing_time']:.3f}s "
+                      f"({value['records_per_second']:.1f} rec/s)")
+        
+        print("\nAccuracy Results:")
+        for key, value in self.results.items():
+            if key.startswith('accuracy_'):
+                category = key.split('_', 1)[1].replace('_', ' ').title()
+                print(f"  {category}: {value:.1f}%")
+        
+        print("\nMemory Usage:")
+        memory_values = [v['memory_used'] for k, v in self.results.items() 
+                        if k.startswith('size_')]
+        if memory_values:
+            avg_memory = sum(memory_values) / len(memory_values)
+            print(f"  Average: {avg_memory/1024:.1f}KB per session")
+
+# Run benchmark
+if __name__ == '__main__':
+    benchmark = BenchmarkSuite()
+    benchmark.benchmark_processing_speed()
+    benchmark.benchmark_accuracy()
+    benchmark.generate_report()
+```
+
+---
+
+## 🔗 Integration Examples
+
+### Django Integration
+
+```python
+# django_integration.py
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+from blueedge import BlueEdge
+import json
+
+# Initialize BlueEdge (can be done at module level)
+processor = BlueEdge()
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def clean_data_api(request):
+    """Django API endpoint for data cleaning"""
+    try:
+        # Parse JSON data
+        data = json.loads(request.body)
+        records = data.get('records', [])
+        
+        if not records:
+            return JsonResponse({'error': 'No records provided'}, status=400)
+        
+        # Process with BlueEdge
+        result = processor.clean_data(records)
+        
+        # Return results
+        return JsonResponse({
+            'success': True,
+            'results': {
+                'total_records': result['total_records'],
+                'duplicates_count': result['duplicates_count'],
+                'accuracy_score': result['accuracy_score'],
+                'processing_time': result['processing_time']
+            }
+        })
+        
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+# urls.py
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('api/clean-data/', views.clean_data_api, name='clean_data'),
+]
+```
+
+### Flask Integration
+
+```python
+# flask_integration.py
+from flask import Flask, request, jsonify
+from blueedge import BlueEdge
+import time
+
+app = Flask(__name__)
+processor = BlueEdge()
+
+@app.route('/api/clean', methods=['POST'])
+def clean_data():
+    """Flask API endpoint for data cleaning"""
+    try:
+        data = request.get_json()
+        
+        if not data or 'records' not in data:
+            return jsonify({'error': 'No records provided'}), 400
+        
+        records = data['records']
+        
+        # Process with BlueEdge
+        start_time = time.time()
+        result = processor.clean_data(records)
+        processing_time = time.time() - start_time
+        
+        return jsonify({
+            'success': True,
+            'results': result,
+            'api_processing_time': processing_time
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/status', methods=['GET'])
+def get_status():
+    """Get BlueEdge status and metrics"""
+    return jsonify({
+        'status': 'online',
+        'version': '1.0.0',
+        'capabilities': [
+            'duplicate_detection',
+            'name_normalization',
+            'similarity_matching'
+        ]
+    })
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+
+---
+
+## 📚 Learning Path
+
+### Beginner (Start Here)
+1. **[Basic Usage](#basic-duplicate-detection)** - Learn core functionality
+2. **[Mobile App Setup](#kivy-application-setup)** - Build your first mobile app
+3. **[Firebase Integration](#setting-up-firebase-connection)** - Connect to cloud
+
+### Intermediate
+1. **[Performance Monitoring](#real-time-performance-tracking)** - Track system metrics
+2. **[Batch Processing](#batch-processing-with-progress-tracking)** - Handle large datasets
+3. **[Custom Functions](#custom-similarity-functions)** - Extend functionality
+
+### Advanced
+1. **[Multi-threading](#multi-threading-for-performance)** - Optimize performance
+2. **[Web Integration](#django-integration)** - Build APIs
+3. **[Testing & Benchmarking](#unit-testing)** - Ensure quality
+
+---
+
+## 🤝 Community Examples
+
+Share your BlueEdge implementations with the community! 
+
+- **[Submit your example](https://github.com/username/BlueEdge-Framework/discussions)**
+- **[Browse community examples](https://github.com/username/BlueEdge-Framework/discussions/categories/show-and-tell)**
+- **[Get help with your implementation](https://github.com/username/BlueEdge-Framework/discussions/categories/q-a)**
+
+## 📞 Need Help?
+
+- **💬 [GitHub Discussions](https://github.com/username/BlueEdge-Framework/discussions)** - Community support
+- **🐛 [Issues](https://github.com/username/BlueEdge-Framework/issues)** - Report problems
+- **📖 [Documentation](../docs/)** - Comprehensive guides
+- **📧 [Email](mailto:contact@blueedge.com)** - Direct support

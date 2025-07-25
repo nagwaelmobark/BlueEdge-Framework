@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }} - BlueEdge Framework</title>
+    <meta name="description" content="{{ page.description | default: site.description }}">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Highlight.js for Code Syntax -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        /* Main Content Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 100px;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+        
+        .sidebar h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+        }
+        
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar ul li a {
+            color: #666;
+            text-decoration: none;
+            display: block;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+        
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background: #667eea;
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .sidebar ul li a i {
+            margin-right: 8px;
+            width: 16px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin: 40px 0;
+        }
+        
+        /* Typography */
+        .main-content h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .main-content h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #333;
+            margin: 30px 0 20px;
+            padding-left: 15px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .main-content h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #444;
+            margin: 25px 0 15px;
+        }
+        
+        .main-content h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #555;
+            margin: 20px 0 10px;
+        }
+        
+        .main-content p {
+            margin-bottom: 15px;
+            color: #666;
+            line-height: 1.7;
+        }
+        
+        .main-content ul, .main-content ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        
+        .main-content ul li, .main-content ol li {
+            margin-bottom: 8px;
+            color: #666;
+        }
+        
+        /* Code Blocks */
+        .main-content pre {
+            background: #2d3748;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border-left: 4px solid #667eea;
+        }
+        
+        .main-content code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #e53e3e;
+        }
+        
+        .main-content pre code {
+            background: none;
+            padding: 0;
+            color: #e2e8f0;
+        }
+        
+        /* Tables */
+        .main-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .main-content table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .main-content table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .main-content table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .main-content table tr:hover {
+            background: #e2e8f0;
+        }
+        
+        /* Blockquotes */
+        .main-content blockquote {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+            font-style: italic;
+            color: #555;
+        }
+        
+        /* Links */
+        .main-content a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .main-content a:hover {
+            color: #5a6fd8;
+            text-decoration: underline;
+        }
+        
+        /* Navigation Buttons */
+        .doc-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+            color: white;
+        }
+        
+        .nav-btn i {
+            margin: 0 8px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .sidebar {
+                position: static;
+                max-height: none;
+                margin-bottom: 20px;
+            }
+            
+            .main-content {
+                padding: 30px 20px;
+                margin: 0;
+            }
+            
+            .main-content h1 {
+                font-size: 2rem;
+            }
+            
+            .main-content h2 {
+                font-size: 1.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .doc-navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="{{ site.baseurl }}/" class="logo">
+                <i class="fas fa-cube"></i> BlueEdge Framework
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="{{ site.baseurl }}/">Home</a></li>
+                    <li><a href="{{ site.baseurl }}/docs/">Documentation</a></li>
+                    <li><a href="{{ site.baseurl }}/examples/">Examples</a></li>
+                    <li><a href="https://github.com/nagwaelmobark/BlueEdge-Framework" target="_blank">
+                        <i class="fab fa-github"></i> GitHub
+                    </a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h3><i class="fas fa-book"></i> Documentation</h3>
+            <ul>
+                <li><a href="{{ site.baseurl }}/docs/user-guide/">
+                    <i class="fas fa-user"></i> User Guide
+                </a></li>
+                <li><a href="{{ site.baseurl }}/docs/installation/">
+                    <i class="fas fa-download"></i> Installation
+                </a></li>
+                <li><a href="{{ site.baseurl }}/docs/api-reference/">
+                    <i class="fas fa-code"></i> API Reference
+                </a></li>
+                <li><a href="{{ site.baseurl }}/docs/architecture/">
+                    <i class="fas fa-project-diagram"></i> Architecture
+                </a></li>
+                <li><a href="{{ site.baseurl }}/docs/performance-analysis/">
+                    <i class="fas fa-chart-line"></i> Performance Analysis
+                </a></li>
+            </ul>
+
+            <h3 style="margin-top: 30px;"><i class="fas fa-graduation-cap"></i> Research</h3>
+            <ul>
+                <li><a href="{{ site.baseurl }}/research/paper/">
+                    <i class="fas fa-file-pdf"></i> Research Paper
+                </a></li>
+                <li><a href="{{ site.baseurl }}/research/methodology/">
+                    <i class="fas fa-flask"></i> Methodology
+                </a></li>
+                <li><a href="{{ site.baseurl }}/research/results/">
+                    <i class="fas fa-chart-bar"></i> Results
+                </a></li>
+            </ul>
+
+            <h3 style="margin-top: 30px;"><i class="fas fa-tools"></i> Development</h3>
+            <ul>
+                <li><a href="{{ site.baseurl }}/examples/">
+                    <i class="fas fa-code-branch"></i> Examples
+                </a></li>
+                <li><a href="{{ site.baseurl }}/contributing/">
+                    <i class="fas fa-hands-helping"></i> Contributing
+                </a></li>
+                <li><a href="https://github.com/nagwaelmobark/BlueEdge-Framework/issues" target="_blank">
+                    <i class="fas fa-bug"></i> Issues
+                </a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Page Header -->
+            {% if page.title %}
+            <h1>{{ page.title }}</h1>
+            {% endif %}
+            
+            {% if page.description %}
+            <p style="font-size: 1.1rem; color: #555; margin-bottom: 30px; font-style: italic;">
+                {{ page.description }}
+            </p>
+            {% endif %}
+
+            <!-- Main Content -->
+            {{ content }}
+
+            <!-- Navigation -->
+            <div class="doc-navigation">
+                {% if page.prev_page %}
+                <a href="{{ site.baseurl }}{{ page.prev_page.url }}" class="nav-btn">
+                    <i class="fas fa-arrow-left"></i> {{ page.prev_page.title }}
+                </a>
+                {% else %}
+                <div></div>
+                {% endif %}
+
+                {% if page.next_page %}
+                <a href="{{ site.baseurl }}{{ page.next_page.url }}" class="nav-btn">
+                    {{ page.next_page.title }} <i class="fas fa-arrow-right"></i>
+                </a>
+                {% else %}
+                <div></div>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Initialize Highlight.js
+        hljs.highlightAll();
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add copy button to code blocks
+        document.querySelectorAll('pre code').forEach((block) => {
+            const button = document.createElement('button');
+            button.innerText = 'Copy';
+            button.style.cssText = `
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                padding: 5px 10px;
+                background: #667eea;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 12px;
+            `;
+            
+            const pre = block.parentElement;
+            pre.style.position = 'relative';
+            pre.appendChild(button);
+            
+            button.addEventListener('click', () => {
+                navigator.clipboard.writeText(block.textContent);
+                button.innerText = 'Copied!';
+                setTimeout(() => button.innerText = 'Copy', 2000);
+            });
+        });
+
+        // Add badges for code language
+        document.querySelectorAll('pre code').forEach((block) => {
+            const language = block.className.match(/language-(\w+)/);
+            if (language) {
+                const badge = document.createElement('span');
+                badge.innerText = language[1];
+                badge.style.cssText = `
+                    position: absolute;
+                    top: 10px;
+                    left: 10px;
+                    padding: 2px 8px;
+                    background: rgba(255,255,255,0.2);
+                    color: white;
+                    border-radius: 3px;
+                    font-size: 11px;
+                    text-transform: uppercase;
+                `;
+                block.parentElement.appendChild(badge);
+            }
+        });
+    </script>
+</body>
+</html> 
